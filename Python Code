@@ -1,0 +1,36 @@
+!pip install yfinance
+
+import pandas as pd
+import numpy as np
+import yfinance as yfin
+import plotly.offline as plo
+import plotly.graph_objs as go
+
+ticker = 'CL=F' 
+ticker =yfin.Ticker(ticker)
+df= ticker.history (period='10y')
+
+df.isnull().values.any()
+
+np.False_
+
+df.head(10)
+
+traces= [go.Scatter(
+         x=df. index,
+         y =df['Close'],
+         mode= 'markers+lines',
+         marker_size=3)]
+
+layout= go.Layout(title = 'Oil price evolution since 2014', xaxis = dict(title="Year"), yaxis= dict(title="Crude Oil in USD per barrel"))
+fig= go.Figure(data=traces, layout=layout)
+fig
+
+df['Closing_50d_rolling_mean'] = df['Close'].rolling(50).mean()
+df['Closing_200d_rolling_mean'] = df['Close'].rolling(200).mean()
+
+
+fig.add_scatter(x=df.index, y=df['Closing_50d_rolling_mean'], mode='lines') 
+fig.add_scatter(x=df.index, y=df['Closing_200d_rolling_mean'], mode='lines')
+
+
